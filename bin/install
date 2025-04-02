@@ -2,6 +2,7 @@
 
 set -euo pipefail
 
+[ -n "${DEBUG}" ] && { export PS4='+ [${BASH_SOURCE##*/}:${LINENO}] ' ; set -x; };
 [ -z "${ASDF_INSTALL_TYPE+x}" ] && echo "ASDF_INSTALL_TYPE is required" && exit 1
 [ -z "${ASDF_INSTALL_VERSION+x}" ] && echo "ASDF_INSTALL_VERSION is required" && exit 1
 [ -z "${ASDF_INSTALL_PATH+x}" ] && echo "ASDF_INSTALL_PATH is required" && exit 1
@@ -49,16 +50,17 @@ get_cpu() {
 }
 
 get_download_url() {
-  local version="$1"
+  local version="v$1"
   local platform="$(get_arch)"
   local url=""
-  
+
   if [[ "$version" < "v3.7.2" ]]; then
-    url="https://github.com/getsops/sops/releases/download/${version}/sops-${version}.${platform}"
+    #url="https://github.com/getsops/sops/releases/download/${version}/sops-${version}.${platform}"
+    url="https://github.com/getsops/sops/releases/download/${version}/sops-${version}.${platform}.$(get_cpu)"
   else
     url="https://github.com/getsops/sops/releases/download/${version}/sops-${version}.${platform}.$(get_cpu)"
   fi
-  
+
   echo "$url"
 }
 
